@@ -1,0 +1,15 @@
+def reprocess_era5_dataset(ds):
+    return ds.drop_vars(['number', 'expver']).rename(
+        {'valid_time':'time',
+         'pressure_level':'level',
+         'latitude':'lat',
+         'longitude':'lon'})
+
+year = 2025
+
+u = xr.open_mfdataset(
+    glob.glob(os.path.join('G:/Data/ERA5/','u','*',f'*{year}.nc')),
+).u.pipe(reprocess_era5_dataset)
+v = xr.open_mfdataset(
+    glob.glob(os.path.join('G:/Data/ERA5/','v','*',f'*{year}.nc')),
+).v.pipe(reprocess_era5_dataset)
